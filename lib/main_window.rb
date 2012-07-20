@@ -1,5 +1,5 @@
 require 'gosu'
-require 'scene_object'
+require './scene_object'
 require './sprite_sheet.rb'
 require './animation.rb'
 require './animate_object.rb'
