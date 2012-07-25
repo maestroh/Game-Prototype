@@ -1,11 +1,5 @@
 require "test/unit"
-require_relative "../../lib/key_binding"
-require_relative "../../lib/key_bindings"
-require_relative "../../lib/game.rb"
-require_relative "../../lib/scene.rb"
-require_relative "../../lib/animate_object.rb"
-require_relative "../../lib/animation.rb"
-require_relative "../../lib/sprite_sheet.rb"
+Dir[File.dirname(__FILE__) + '/lib/*.rb'].each {|file| require file }
 
 class KeyPressAnimationTest < Test::Unit::TestCase
   
