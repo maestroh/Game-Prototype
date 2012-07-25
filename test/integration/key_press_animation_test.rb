@@ -1,11 +1,11 @@
 require "test/unit"
-require "../../lib/key_binding"
-require "../../lib/key_bindings"
-require "../../lib/game.rb"
-require "../../lib/scene.rb"
-require "../../lib/animate_object.rb"
-require "../../lib/animation.rb"
-require "../../lib/sprite_sheet.rb"
+require_relative "../../lib/key_binding"
+require_relative "../../lib/key_bindings"
+require_relative "../../lib/game.rb"
+require_relative "../../lib/scene.rb"
+require_relative "../../lib/animate_object.rb"
+require_relative "../../lib/animation.rb"
+require_relative "../../lib/sprite_sheet.rb"
 
 class KeyPressAnimationTest < Test::Unit::TestCase
   

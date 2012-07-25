@@ -1,5 +1,5 @@
-require 'direction'
-require 'z_order'
+require './direction.rb'
+require './z_order.rb'
 
 class Animation
   def initialize(name, sprite_sheet)
