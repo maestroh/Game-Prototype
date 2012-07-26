@@ -1,5 +1,11 @@
 require "test/unit"
-Dir[File.dirname(__FILE__) + '/lib/*.rb'].each {|file| require file }
+#Dir[File.dirname(__FILE__) + '../../../lib/*.rb'].each {|file| require file }
+require File.expand_path('../../../lib/animation.rb', __FILE__)
+require File.expand_path('../../../lib/scene.rb', __FILE__)
+require File.expand_path('../../../lib/animate_object.rb', __FILE__)
+require File.expand_path('../../../lib/sprite_sheet.rb', __FILE__)
+
+puts $LOAD_PATH
 
 class KeyPressAnimationTest < Test::Unit::TestCase
   
