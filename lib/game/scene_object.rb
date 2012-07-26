@@ -1,4 +1,4 @@
-require './z_order.rb'
+require_relative 'z_order.rb'
 
 class SceneObject
 

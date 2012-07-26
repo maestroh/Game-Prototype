@@ -1,12 +1,12 @@
 require 'gosu'
-require './scene_object'
-require './sprite_sheet.rb'
-require './animation.rb'
-require './animate_object.rb'
-require './scene.rb'
-require './key_bindings.rb'
-require './key_binding.rb'
-require './game.rb'
+require_relative 'game/scene_object.rb'
+require_relative 'game/sprite_sheet.rb'
+require_relative 'game/animation.rb'
+require_relative 'game/animate_object.rb'
+require_relative 'game/scene.rb'
+require_relative 'game/key_bindings.rb'
+require_relative 'game/key_binding.rb'
+require_relative 'game/game.rb'
 
 class Main_window < Gosu::Window
   def initialize
