@@ -12,6 +12,23 @@ class KeyBindings
   end
   
   def get_binding(key_combo)
-     @bindings.select {|x| x.key_combo == key_combo}[0]
+    raise TypeError, "key_combo argument expected to be an array" unless key_combo.kind_of?(Array)
+    @bindings.select {|x| x.key_combo == key_combo}[0]
+    
+    #@bindings.each do |y|
+    #  puts y.key_combo.class
+    #  puts key_combo.class
+    #  puts y.key_combo
+    #  puts key_combo
+    #  puts y.key_combo == key_combo
+    #  puts y.key_combo.eql?(key_combo)
+    #  puts y.key_combo.equal?(key_combo) 
+    #  if y.key_combo == key_combo
+    #    puts "hello"
+    #    binding1 = y
+    #  end
+    #end
+    #puts binding1.nil?
+    #binding1
   end
 end

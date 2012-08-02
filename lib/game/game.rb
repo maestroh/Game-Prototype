@@ -8,8 +8,8 @@ class Game
   end
   
   def update(key_combo)
-    binding = @key_bindings.get_binding(key_combo)
-    object = @scene.get_object(binding.game_object_id)
-    object.perform_animation(binding.action_name)
+    binding = @key_bindings.get_binding([key_combo])
+    game_object = @scene.get_object(binding.game_object_id)
+    game_object.perform_animation(binding.action_name)
   end
 end

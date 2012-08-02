@@ -13,9 +13,9 @@ class KeyBindingsTest < MiniTest::Unit::TestCase
   
   def test_that_keybindings_returns_binding
        
-    binding = @key_bindings.get_binding(@key_combo)
+    binding = @key_bindings.get_binding([Gosu::KbRight])
     refute_nil binding
-    assert_equal binding.game_object_id, @run.game_object_id
-    assert_equal binding.action_name, @run.action_name
+    assert_equal binding.game_object_id, "buck"
+    assert_equal binding.action_name, "buck_run"
   end
 end
