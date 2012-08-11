@@ -1,6 +1,11 @@
 class Ground
-  def initialize(height)
+  def initialize(height, gravity)
     @height = height
+    @gravity = gravity
+  end
+  
+  def get_gravity
+    @gravity
   end
   
   def above_ground?(y)
