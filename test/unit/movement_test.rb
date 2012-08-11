@@ -62,8 +62,9 @@ class Movement_Test < MiniTest::Unit::TestCase
     moveVector = Vector2d.new(1,10)
     movement = Movement.new(vector, ground)
 
+    movement.move(moveVector)
+
     21.times do
-      movement.move(moveVector)
       movement.update_position!
     end
     
