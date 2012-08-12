@@ -1,16 +1,10 @@
-def ActionInterupt
+class ActionInterrupt
   
-  def initialize(actionID, followUpAction)
+  def initialize(actionID)
     @actionID= actionID
-    @followUpAction = followUpAction
   end
   
   def actionID
     @actionID
   end
-  
-  def followUpAction
-    @followUpAction
-  end
-  
 end

@@ -1,9 +1,9 @@
 require_relative "movement.rb"
 require_relative "animation.rb"
 
-def Action
+class Action
   
-  def initialize(actionID, objectID, animation, movement)
+  def initialize(objectID, actionID, animation, movement)
     @animation = animation
     @movement = movement
     @actionID = actionID
