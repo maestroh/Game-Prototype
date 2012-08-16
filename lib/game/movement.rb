@@ -27,11 +27,11 @@ class Movement
     end 
   end
   
-  def get_position
+  def position
     @position
   end
   
-  def move(position, direction)
+  def move!(direction, position)
     @position = position
     
     @vx = @move_vector.x * direction

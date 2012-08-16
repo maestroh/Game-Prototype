@@ -12,7 +12,7 @@ class Movement_Test < MiniTest::Unit::TestCase
     vector = Vector2d.new(0,0)
     movement = Movement.new(vector, ground)
     
-    current_position = movement.get_position
+    current_position = movement.position
     
     assert_equal vector, current_position 
   end
@@ -23,10 +23,10 @@ class Movement_Test < MiniTest::Unit::TestCase
     positionVector = Vector2d.new(1,1)
     movement = Movement.new(vector, ground)
     
-    movement.move(positionVector, Direction::Right)
+    movement.move!(Direction::Right, positionVector)
     movement.update_position!
     
-    assert_equal Vector2d.new(11,1), movement.get_position
+    assert_equal Vector2d.new(11,1), movement.position
   end
   
   def test_update_y_change_should_return_to_ground_height
@@ -35,13 +35,13 @@ class Movement_Test < MiniTest::Unit::TestCase
     positionVector = Vector2d.new(1, 1)
     movement = Movement.new(vector, ground)
 
-    movement.move(positionVector, Direction::Right)
+    movement.move!(Direction::Right, positionVector)
     
     10.times do
       movement.update_position!
     end
     
-    assert_equal Vector2d.new(1, ground.get_height), movement.get_position
+    assert_equal Vector2d.new(1, ground.get_height), movement.position
   end
   
   def test_update_x_y_change_should_return_to_ground_height
@@ -49,14 +49,14 @@ class Movement_Test < MiniTest::Unit::TestCase
     vector = Vector2d.new(3, 3)
     positionVector = Vector2d.new(1,1)
     movement = Movement.new(vector, ground)
-
-    movement.move(positionVector, Direction::Right)
+    movement.move!(Direction::Right, positionVector)
+    
 
     10.times do
       movement.update_position!
     end
     
-    assert_equal Vector2d.new(4, ground.get_height), movement.get_position
+    assert_equal Vector2d.new(4, ground.get_height), movement.position
   end
   
 end

@@ -8,7 +8,7 @@ class Vector2d
   end
 
   def ==(vector)
-    ( vector.x == @x && vector.y == y )
+    ( vector.x == @x && vector.y == @y )
   end
 
   def +(vector)

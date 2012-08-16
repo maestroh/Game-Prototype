@@ -8,7 +8,8 @@ class Action
     @movement = movement
     @actionID = actionID
     @objectID = objectID
-    
+    @direction = Direction::Right
+    @position = Vector2d.new(0,0)
     @interrupts = []
   end
   
@@ -20,6 +21,10 @@ class Action
     @objectID
   end
   
+  def position
+    @movement.position
+  end
+  
   def addInterrupt(interrupt)
     @interrupts << interrupt
   end
@@ -28,9 +33,15 @@ class Action
     @interrupts.select {|i| i.actionID == actionID}.size > 0
   end
   
-  def update
-    @animation.draw
-    @movement.update
+  def start(direction, position)
+    @direction = direction
+    @position = position
+    @movement.move!(direction, position)
+  end
+  
+  def update()
+    @animation.draw(@direction)
+    @movement.update_position!(@direction, @position)
   end
   
 end

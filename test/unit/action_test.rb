@@ -1,19 +1,23 @@
 require 'minitest/autorun'
 require File.expand_path('../../../lib/game/action.rb', __FILE__)
 require File.expand_path('../../../lib/game/action_interrupt.rb', __FILE__)
+require File.expand_path('../../../lib/game/vector2d.rb', __FILE__)
 
 class Action_Test < MiniTest::Unit::TestCase
   
   def setup
     @objectID = "object"
     @actionID = "action"
+    @position = Vector2d.new(1,1)
     
     animation = MiniTest::Mock::new
-    animation.expect :draw, nil
-    movement = MiniTest::Mock::new
-    movement.expect :update, nil
+    animation.expect :draw, nil, [Direction::Right]
+    @movement = MiniTest::Mock::new
+    @movement.expect :update_position!, nil, [Direction::Right, @position]
+    @movement.expect :move!, nil, [Direction::Right, @position]
     
-    @action = Action.new(@objectID, @actionID, animation, movement)
+    
+    @action = Action.new(@objectID, @actionID, animation, @movement)
   end
     
   def test_should_contain_objectID
@@ -32,7 +36,10 @@ class Action_Test < MiniTest::Unit::TestCase
     assert_equal @action.interrupt?("newaction"), true
   end 
   
-  def test_should_update
-    @action.update
+  def test_should_start_and_update
+    @action.start(Direction::Right, @position)
+    @action.update()
+    
+    @movement.verify 
   end
 end
