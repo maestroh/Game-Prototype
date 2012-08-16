@@ -1,3 +1,4 @@
 module Direction
-  Left, Right = -1, 1 
+  Left = -1
+  Right = 1 
 end

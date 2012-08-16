@@ -3,38 +3,41 @@ require_relative 'gravity.rb'
 
 class Movement
   
-  def initialize(start_position, ground)
-    @position = start_position
-    @in_air = false
+  def initialize(move_vector, ground)
+    @move_vector = move_vector
+    @position = Vector2d.new(0,0)
     @ground = ground
     @vx = 0
     @vy = 0
+    @in_air = false
   end 
   
   def update_position!
     @position.x += @vx
+    @vx = 0
     
-    if @in_air == true
-      if @ground.above_ground?(@position.y + @vy) || @ground.below_ground?(@position.y)
-        @position.y += @vy
-        @vy += @ground.get_gravity
-      else
-        @in_air = false
-        @position.y = @ground.get_height
-      end 
+    if @vy != 0 || @ground.above_ground?(@position.y)
+      @position.y += @vy
+      @vy -= @ground.get_gravity
     end
+    
+    if @ground.below_ground?(@position.y)
+      @position.y = @ground.get_height
+      @vy = 0
+    end 
   end
   
   def get_position
     @position
   end
   
-  def move(vector)
-    @vx = vector.x
+  def move(position, direction)
+    @position = position
     
-    if vector.y > 0 && !@in_air then
-      @in_air = true
-      @vy = -vector.y
+    @vx = @move_vector.x * direction
+    
+    if @ground.on_ground?(@position.y) then
+      @vy = @move_vector.y
     end
   end  
   
