@@ -27,7 +27,7 @@ class AnimateObject
   def animation_names
     names = []
     
-    @scene.each {|x| names << x.name}
+    @animations.each {|x| names << x.name}
     
     names
   end
@@ -36,9 +36,9 @@ class AnimateObject
     @current_animation = @animations.select {|x| x.name == name}[0]
   end
  
-  def draw
+  def draw(direction)
     @current_animation.warp(@x, @y)
-    @current_animation.draw
+    @current_animation.draw(direction)
   end  
       
 end

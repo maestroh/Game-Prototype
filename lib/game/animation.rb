@@ -17,12 +17,6 @@ class Animation
     @name
   end
   
-  def set_direction(direction)
-    raise TypeError, "Direction argument expected" unless direction == Direction::Left || direction == Direction::Right
-    
-    @direction = direction
-  end
-  
   def warp(x,y)
     @x = x
     @y = y
@@ -32,7 +26,8 @@ class Animation
     @zorder = zorder
   end
     
-  def draw
+  def draw(direction)
+    @direction = direction
     img = @sprite_sheet.image
     x_upperleft = @x - img.width / 2.0 * @direction
     y_upperleft = @y - img.height / 2.0
