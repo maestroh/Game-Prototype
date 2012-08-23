@@ -27,6 +27,10 @@ class Movement
     end 
   end
   
+  def done?
+    @vx == 0 && @vy == 0
+  end
+  
   def position
     @position
   end

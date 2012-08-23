@@ -12,7 +12,7 @@ class KeyBindings
   end
   
   def get_binding(key_combo)
-    raise TypeError, "key_combo argument expected to be an array" unless key_combo.kind_of?(Array)
+    raise ArgumentError, "key_combo argument expected to be an array" unless key_combo.kind_of?(Array)
     @bindings.select {|x| x.key_combo == key_combo}[0]
   end
 end

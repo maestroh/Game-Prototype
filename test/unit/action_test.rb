@@ -15,6 +15,7 @@ class Action_Test < MiniTest::Unit::TestCase
     @movement = MiniTest::Mock::new
     @movement.expect :update_position!, nil, [Direction::Right, @position]
     @movement.expect :move!, nil, [Direction::Right, @position]
+    @movement.expect :done?, true
     
     
     @action = Action.new(@objectID, @actionID, animation, @movement)
@@ -39,7 +40,17 @@ class Action_Test < MiniTest::Unit::TestCase
   def test_should_start_and_update
     @action.start(Direction::Right, @position)
     @action.update()
+    @action.done?
     
     @movement.verify 
+  end
+  
+  def test_done_should_return_true_after_update
+    @action.start(Direction::Right, @position)
+    
+    10.times do
+      @action.update()
+    end
+    assert_equal true, @action.done?
   end
 end

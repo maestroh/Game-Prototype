@@ -51,12 +51,40 @@ class Movement_Test < MiniTest::Unit::TestCase
     movement = Movement.new(vector, ground)
     movement.move!(Direction::Right, positionVector)
     
-
     10.times do
       movement.update_position!
     end
     
     assert_equal Vector2d.new(4, ground.get_height), movement.position
+  end
+  
+  def test_done_returns_false_before_update_x_y_change
+    ground = Ground.new(1, 1)
+    vector = Vector2d.new(3, 3)
+    positionVector = Vector2d.new(1,1)
+    movement = Movement.new(vector, ground)
+    movement.move!(Direction::Right, positionVector)
+
+    assert_equal false, movement.done?
+    
+    10.times do
+      movement.update_position!
+    end
+    
+  end
+  
+  def test_done_returns_true_after_update_x_y_change
+    ground = Ground.new(1, 1)
+    vector = Vector2d.new(3, 3)
+    positionVector = Vector2d.new(1,1)
+    movement = Movement.new(vector, ground)
+    movement.move!(Direction::Right, positionVector)
+    
+    10.times do
+      movement.update_position!
+    end
+    
+    assert_equal true, movement.done?
   end
   
 end

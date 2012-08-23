@@ -33,6 +33,10 @@ class Action
     @interrupts.select {|i| i.actionID == actionID}.size > 0
   end
   
+  def done?
+    @movement.done?
+  end
+  
   def start(direction, position)
     @direction = direction
     @position = position
