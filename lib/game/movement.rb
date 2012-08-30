@@ -12,7 +12,7 @@ class Movement
     @in_air = false
   end 
   
-  def update_position!
+  def draw
     @position.x += @vx
     @vx = 0
     
@@ -35,7 +35,7 @@ class Movement
     @position
   end
   
-  def move!(direction, position)
+  def update(direction, position)
     @position = position
     
     @vx = @move_vector.x * direction

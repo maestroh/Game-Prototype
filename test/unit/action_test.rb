@@ -10,15 +10,17 @@ class Action_Test < MiniTest::Unit::TestCase
     @actionID = "action"
     @position = Vector2d.new(1,1)
     
-    animation = MiniTest::Mock::new
-    animation.expect :draw, nil, [Direction::Right]
+    @animation = MiniTest::Mock::new
+    @animation.expect :draw, nil
+    @animation.expect :update, nil, [Direction::Right]
     @movement = MiniTest::Mock::new
-    @movement.expect :update_position!, nil, [Direction::Right, @position]
-    @movement.expect :move!, nil, [Direction::Right, @position]
+    @movement.expect :update, nil, [Direction::Right, @position]
+    @movement.expect :draw, nil
     @movement.expect :done?, true
+    @movement.expect :position, @position
     
     
-    @action = Action.new(@objectID, @actionID, animation, @movement)
+    @action = Action.new(@objectID, @actionID, @animation, @movement)
   end
     
   def test_should_contain_objectID
@@ -37,19 +39,25 @@ class Action_Test < MiniTest::Unit::TestCase
     assert_equal @action.interrupt?("newaction"), true
   end 
   
-  def test_should_start_and_update
-    @action.start(Direction::Right, @position)
-    @action.update()
+  def test_should_update_and_draw
+    @action.update(Direction::Right, @position)
+    @action.draw
     @action.done?
-    
-    @movement.verify 
+    @action.position
+
+    @movement.verify
+    @animation.verify
+  end
+  
+  def test_position_should_equal_movement_position
+    assert_equal @position, @action.position
   end
   
   def test_done_should_return_true_after_update
-    @action.start(Direction::Right, @position)
+    @action.update(Direction::Right, @position)
     
     10.times do
-      @action.update()
+      @action.draw
     end
     assert_equal true, @action.done?
   end

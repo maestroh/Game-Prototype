@@ -1,6 +1,8 @@
 require 'minitest/autorun'
 require File.expand_path('../../../lib/game/action_object.rb', __FILE__)
 require File.expand_path('../../../lib/game/vector2d.rb', __FILE__)
+require File.expand_path('../../../lib/game/direction.rb', __FILE__)
+require_relative 'Mock.rb'
 
 class ActionObjectTest < MiniTest::Unit::TestCase
   
@@ -57,17 +59,17 @@ class ActionObjectTest < MiniTest::Unit::TestCase
     end
   end
   
-  def test_when_perform_action_not_found_then_throw
+  def test_when_update_action_not_found_then_throw
     action_object = ActionObject.new(@position)
     action_object.add_action(@action1)
     action_object.add_action(@action2)
     
     assert_raises ArgumentError do
-      action_object.perform_action("someUnknownAction")
+      action_object.update("someUnknownAction", Direction::Right)
     end
   end
   
-  def test_perform_action_interrupts_default_action
+  def test_update_action_interrupts_default_action
     defaultAction = mock(@actionID1, false, @actionID2, true)
     secondAction = mock(@actionID2, false, nil, false)
     
@@ -75,13 +77,13 @@ class ActionObjectTest < MiniTest::Unit::TestCase
     action_object.add_action(defaultAction)
     action_object.add_action(secondAction)
     
-    action_object.perform_action(defaultAction.actionID)
-    action_object.perform_action(secondAction.actionID)
+    action_object.update(defaultAction.actionID, Direction::Right)
+    action_object.update(secondAction.actionID, Direction::Right)
     
     assert_equal secondAction.actionID, action_object.get_active_action.actionID
   end
   
-  def test_perform_action_does_not_interrupt_default_action
+  def test_update_does_not_interrupt_default_action
     defaultAction = mock(@actionID1, false, @actionID2, false)
     secondAction = mock(@actionID2, false, nil, false)
     
@@ -89,13 +91,13 @@ class ActionObjectTest < MiniTest::Unit::TestCase
     action_object.add_action(defaultAction)
     action_object.add_action(secondAction)
     
-    action_object.perform_action(defaultAction.actionID)
-    action_object.perform_action(secondAction.actionID)
+    action_object.update(defaultAction.actionID, Direction::Right)
+    action_object.update(secondAction.actionID, Direction::Right)
     
     assert_equal defaultAction.actionID, action_object.get_active_action.actionID
   end
   
-  def test_perform_action_performs_default_action_when_done
+  def test_draw_performs_default_action_when_done
     defaultAction = mock(@actionID1, false, @actionID2, true)
     secondAction = mock(@actionID2, true, nil, false)
     
@@ -103,8 +105,8 @@ class ActionObjectTest < MiniTest::Unit::TestCase
     action_object.add_action(defaultAction)
     action_object.add_action(secondAction)
     
-    action_object.perform_action(secondAction.actionID)
-    action_object.update
+    action_object.update(secondAction.actionID, Direction::Right)
+    action_object.draw
     
     assert_equal defaultAction.actionID, action_object.get_active_action.actionID
   end
@@ -119,13 +121,70 @@ class ActionObjectTest < MiniTest::Unit::TestCase
     action_object.add_action(secondAction)
     action_object.add_action(thirdAction)
     
-    action_object.perform_action(secondAction.actionID)
-    action_object.update
+    action_object.update(secondAction.actionID, Direction::Right)
+    action_object.draw
     
-    action_object.perform_action(thirdAction.actionID)
-    action_object.update
+    action_object.update(thirdAction.actionID, Direction::Right)
+    action_object.draw
     
     assert_equal thirdAction.actionID, action_object.get_active_action.actionID
+  end
+  
+  def test_update_action_when_action_object_updates
+    action = MiniTest::Mock::new
+    action.expect :update, nil, [Direction::Right, @position]
+    action.expect :actionID, "run"
+    action.expect :nil?, false
+    action.expect :interrupt?, nil, ["run"]
+    action_object = ActionObject.new(@position)
+    action_object.add_action(action)
+        
+    action_object.update("run", Direction::Right)
+    
+    action.verify
+    
+  end
+  
+  def test_update_default_action_when_active_action_is_done
+    default_action = MiniTest::Mock::new
+    default_action.expect :update, nil, [Direction::Right, @position]
+    default_action.expect :actionID, "stand"
+    default_action.expect :interrupt?, true, ["run"]
+    default_action.expect :draw, nil
+    default_action.expect :position, Vector2d.new(2,2)
+    
+    active_action = MiniTest::Mock::new
+    active_action.expect :actionID, "run"
+    active_action.expect :done?, true
+    active_action.expect :nil?, false
+    active_action.expect :update, nil, [Direction::Right, @position]
+    
+    action_object = ActionObject.new(@position)
+    action_object.add_action(default_action)
+    action_object.add_action(active_action)
+    action_object.update(active_action.actionID, Direction::Right)
+    
+    action_object.draw
+    
+    default_action.verify_method(:update)
+    
+  end
+  
+  def test_update_action_object_position_after_action_is_drawn
+    default_action = MiniTest::Mock::new
+    default_action.expect :update, nil, [Direction::Right, @position]
+    default_action.expect :actionID, "stand"
+    default_action.expect :interrupt?, false, ["stand"]
+    default_action.expect :draw, nil
+    default_action.expect :done?, false
+    default_action.expect :position, Vector2d.new(2,2)
+    
+    action_object = ActionObject.new(@position)
+    action_object.add_action(default_action)
+    
+    action_object.draw
+    
+    default_action.verify_method(:position)
   end
   
   def mock(id, done, interrupt_id, interrupt)
@@ -133,7 +192,9 @@ class ActionObjectTest < MiniTest::Unit::TestCase
     action.expect :done?, done
     action.expect :actionID, id
     action.expect :nil?, false
-    action.expect :update, nil
+    action.expect :draw, nil
+    action.expect :position, Vector2d.new(2,2)
+    action.expect :update, nil, [Direction::Right, @position]
     if !interrupt.nil?
       action.expect :interrupt?, interrupt, [interrupt_id]
     end

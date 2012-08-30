@@ -3,20 +3,15 @@ class ActionObject
   def initialize(position)
     @actions = Hash.new
     @position = position
+    @direction = nil
   end
   
   def add_action(action)
     raise ArgumentError, "action already exists" unless @actions[action.actionID].nil?
     @actions[action.actionID] = action
     
-    unless @active_action
-      @active_action = action
-    end
-    
-    unless @default_action
-      @default_action = action
-    end 
-      
+    @active_action = action unless @active_action
+    @default_action = action unless @default_action
   end  
   
   def get_action(actionID)
@@ -32,19 +27,24 @@ class ActionObject
     @active_action
   end
   
-  def perform_action(actionID)
+  def update(actionID, direction)
     raise ArgumentError, "action not found" unless !@actions[actionID].nil?
     if @active_action.interrupt?(actionID) 
       @active_action = get_action(actionID)
     end 
+    
+    @direction = direction
+    @active_action.update(@direction, @position)
   end
   
-  def update
-    if !@active_action.done?
-      @active_action.update
-    else
+  def draw
+    if @active_action.done?
       @active_action = @default_action
+      @active_action.update(@direction, @position)
     end
+    
+    @active_action.draw
+    @position = @active_action.position
   end
   
 end

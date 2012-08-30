@@ -23,8 +23,8 @@ class Movement_Test < MiniTest::Unit::TestCase
     positionVector = Vector2d.new(1,1)
     movement = Movement.new(vector, ground)
     
-    movement.move!(Direction::Right, positionVector)
-    movement.update_position!
+    movement.update(Direction::Right, positionVector)
+    movement.draw
     
     assert_equal Vector2d.new(11,1), movement.position
   end
@@ -35,10 +35,10 @@ class Movement_Test < MiniTest::Unit::TestCase
     positionVector = Vector2d.new(1, 1)
     movement = Movement.new(vector, ground)
 
-    movement.move!(Direction::Right, positionVector)
+    movement.update(Direction::Right, positionVector)
     
     10.times do
-      movement.update_position!
+      movement.draw
     end
     
     assert_equal Vector2d.new(1, ground.get_height), movement.position
@@ -49,10 +49,10 @@ class Movement_Test < MiniTest::Unit::TestCase
     vector = Vector2d.new(3, 3)
     positionVector = Vector2d.new(1,1)
     movement = Movement.new(vector, ground)
-    movement.move!(Direction::Right, positionVector)
+    movement.update(Direction::Right, positionVector)
     
     10.times do
-      movement.update_position!
+      movement.draw
     end
     
     assert_equal Vector2d.new(4, ground.get_height), movement.position
@@ -63,12 +63,12 @@ class Movement_Test < MiniTest::Unit::TestCase
     vector = Vector2d.new(3, 3)
     positionVector = Vector2d.new(1,1)
     movement = Movement.new(vector, ground)
-    movement.move!(Direction::Right, positionVector)
+    movement.update(Direction::Right, positionVector)
 
     assert_equal false, movement.done?
     
     10.times do
-      movement.update_position!
+      movement.draw
     end
     
   end
@@ -78,10 +78,10 @@ class Movement_Test < MiniTest::Unit::TestCase
     vector = Vector2d.new(3, 3)
     positionVector = Vector2d.new(1,1)
     movement = Movement.new(vector, ground)
-    movement.move!(Direction::Right, positionVector)
+    movement.update(Direction::Right, positionVector)
     
     10.times do
-      movement.update_position!
+      movement.draw
     end
     
     assert_equal true, movement.done?

@@ -37,15 +37,16 @@ class Action
     @movement.done?
   end
   
-  def start(direction, position)
+  def update(direction, position)
     @direction = direction
     @position = position
-    @movement.move!(direction, position)
+    @movement.update(direction, position)
+    @animation.update(@direction)
   end
   
-  def update()
-    @animation.draw(@direction)
-    @movement.update_position!(@direction, @position)
+  def draw
+    @animation.draw
+    @movement.draw
   end
   
 end

@@ -25,9 +25,12 @@ class Animation
   def set_zorder(zorder)
     @zorder = zorder
   end
-    
-  def draw(direction)
+  
+  def update(direction)
     @direction = direction
+  end
+    
+  def draw()
     img = @sprite_sheet.image
     x_upperleft = @x - img.width / 2.0 * @direction
     y_upperleft = @y - img.height / 2.0

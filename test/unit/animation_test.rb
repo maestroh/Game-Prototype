@@ -22,7 +22,9 @@ class Animation_Test < MiniTest::Unit::TestCase
   end
   
   def test_image_draw_was_called
-    @animation.draw(Direction::Right)
+    @animation.update(Direction::Right)
+    
+    @animation.draw()
     
     @image.verify 
   end
