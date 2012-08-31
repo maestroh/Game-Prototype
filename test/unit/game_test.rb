@@ -26,7 +26,6 @@ class GameTest < MiniTest::Unit::TestCase
     
     # add scene and key_bindings to game
     @game = Game.new(@scene, @key_bindings)
-    
   end
   
   def test_game_update
