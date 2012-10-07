@@ -9,11 +9,11 @@ class Ground
   end
   
   def above_ground?(y)
-    y > @height
+    y < @height
   end
   
   def below_ground?(y)
-    y < @height
+    y > @height
   end
   
   def on_ground?(y)

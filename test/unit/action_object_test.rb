@@ -7,6 +7,7 @@ require_relative 'Mock.rb'
 class ActionObjectTest < MiniTest::Unit::TestCase
   
   def setup
+    @actionObjectID = "object"
     @actionID1 = "stand"
     @actionID2 = "run"
     @actionID3 = "jump"
@@ -20,7 +21,7 @@ class ActionObjectTest < MiniTest::Unit::TestCase
   end
   
   def test_add_action
-    action_object = ActionObject.new(@position)
+    action_object = ActionObject.new(@actionObjectID, @position)
     action_object.add_action(@action1)
     
     action = action_object.get_action(@actionID1)
@@ -28,7 +29,7 @@ class ActionObjectTest < MiniTest::Unit::TestCase
   end
   
   def test_when_adding_duplicate_action_then_throw
-    action_object = ActionObject.new(@position)
+    action_object = ActionObject.new(@actionObjectID, @position)
     assert_raises ArgumentError do
       action_object.add_action(@action1)
       action_object.add_action(@action1)
@@ -36,7 +37,7 @@ class ActionObjectTest < MiniTest::Unit::TestCase
   end
   
   def test_add_default_action
-    action_object = ActionObject.new(@position)
+    action_object = ActionObject.new(@actionObjectID, @position)
     action_object.add_action(@action1)
     action_object.set_default(@actionID1)
     
@@ -45,7 +46,7 @@ class ActionObjectTest < MiniTest::Unit::TestCase
   end
   
   def test_first_action_added_set_to_default_action
-    action_object = ActionObject.new(@position)
+    action_object = ActionObject.new(@actionObjectID, @position)
     action_object.add_action(@action1)
     active_action = action_object.get_active_action
     
@@ -53,14 +54,14 @@ class ActionObjectTest < MiniTest::Unit::TestCase
   end
   
   def test_when_default_action_not_found_then_throw
-    action_object = ActionObject.new(@position)
+    action_object = ActionObject.new(@actionObjectID, @position)
     assert_raises ArgumentError do
       action_object.set_default(@actionID1)
     end
   end
   
   def test_when_update_action_not_found_then_throw
-    action_object = ActionObject.new(@position)
+    action_object = ActionObject.new(@actionObjectID, @position)
     action_object.add_action(@action1)
     action_object.add_action(@action2)
     
@@ -73,7 +74,7 @@ class ActionObjectTest < MiniTest::Unit::TestCase
     defaultAction = mock(@actionID1, false, @actionID2, true)
     secondAction = mock(@actionID2, false, nil, false)
     
-    action_object = ActionObject.new(@position)
+    action_object = ActionObject.new(@actionObjectID, @position)
     action_object.add_action(defaultAction)
     action_object.add_action(secondAction)
     
@@ -87,7 +88,7 @@ class ActionObjectTest < MiniTest::Unit::TestCase
     defaultAction = mock(@actionID1, false, @actionID2, false)
     secondAction = mock(@actionID2, false, nil, false)
     
-    action_object = ActionObject.new(@position)
+    action_object = ActionObject.new(@actionObjectID, @position)
     action_object.add_action(defaultAction)
     action_object.add_action(secondAction)
     
@@ -101,7 +102,7 @@ class ActionObjectTest < MiniTest::Unit::TestCase
     defaultAction = mock(@actionID1, false, @actionID2, true)
     secondAction = mock(@actionID2, true, nil, false)
     
-    action_object = ActionObject.new(@position)
+    action_object = ActionObject.new(@actionObjectID, @position)
     action_object.add_action(defaultAction)
     action_object.add_action(secondAction)
     
@@ -116,7 +117,7 @@ class ActionObjectTest < MiniTest::Unit::TestCase
     secondAction = mock(@actionID2, false, @actionID3, true)
     thirdAction = mock(@actionID3, false, nil, false)
     
-    action_object = ActionObject.new(@position)
+    action_object = ActionObject.new(@actionObjectID, @position)
     action_object.add_action(defaultAction)
     action_object.add_action(secondAction)
     action_object.add_action(thirdAction)
@@ -136,7 +137,7 @@ class ActionObjectTest < MiniTest::Unit::TestCase
     action.expect :actionID, "run"
     action.expect :nil?, false
     action.expect :interrupt?, nil, ["run"]
-    action_object = ActionObject.new(@position)
+    action_object = ActionObject.new(@actionObjectID, @position)
     action_object.add_action(action)
         
     action_object.update("run", Direction::Right)
@@ -159,7 +160,7 @@ class ActionObjectTest < MiniTest::Unit::TestCase
     active_action.expect :nil?, false
     active_action.expect :update, nil, [Direction::Right, @position]
     
-    action_object = ActionObject.new(@position)
+    action_object = ActionObject.new(@actionObjectID, @position)
     action_object.add_action(default_action)
     action_object.add_action(active_action)
     action_object.update(active_action.actionID, Direction::Right)
@@ -179,7 +180,7 @@ class ActionObjectTest < MiniTest::Unit::TestCase
     default_action.expect :done?, false
     default_action.expect :position, Vector2d.new(2,2)
     
-    action_object = ActionObject.new(@position)
+    action_object = ActionObject.new(@actionObjectID, @position)
     action_object.add_action(default_action)
     
     action_object.draw

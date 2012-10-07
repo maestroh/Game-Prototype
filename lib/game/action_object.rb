@@ -1,9 +1,14 @@
 class ActionObject
   
-  def initialize(position)
+  def initialize(id, position)
     @actions = Hash.new
     @position = position
     @direction = nil
+    @id = id
+  end
+  
+  def id
+    @id
   end
   
   def add_action(action)
@@ -38,9 +43,11 @@ class ActionObject
   end
   
   def draw
-    if @active_action.done?
-      @active_action = @default_action
-      @active_action.update(@direction, @position)
+    if @active_action != @default_action
+      if @active_action.done?
+        @active_action = @default_action
+        @active_action.update(@direction, @position)
+      end
     end
     
     @active_action.draw
