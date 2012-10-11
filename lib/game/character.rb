@@ -1,3 +1,5 @@
+require_relative "direction.rb"
+
 class Character
   def initialize(ground, start_position)
     @ground = ground
@@ -17,12 +19,20 @@ class Character
     @states[state_id] = state
   end
   
+  def add_statemachine(statemachine, initial_state, default_event)
+    @statemachine = statemachine
+    
+    @current_state_id = initial_state
+    @default_event = default_event 
+  end
+  
   def states
     @states.keys
   end
   
-  def change_state(state_id)
-    @current_state_id = state_id
+  def change_state(event)
+    output_state = @statemachine.output_state(@current_state_id, event)
+    @current_state_id = output_state unless output_state.nil?
   end
   
   def in_state
@@ -39,6 +49,10 @@ class Character
     
     if @ground.on_ground?(@y) then
       @vy = move_vector.y
+    end
+    
+    if done then
+      change_state(@default_event)
     end
   end
   

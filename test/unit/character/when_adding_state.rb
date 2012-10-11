@@ -11,12 +11,12 @@ class WhenCreatingACharacter < MiniTest::Unit::TestCase
     ground = Ground.new(1,1)
     move_vector = Vector2d.new(0,0)
     
-    @character = Character.new("character", ground)
-    @character.add_state("stand", state, move_vector)
+    @character = Character.new(ground, move_vector)
+    @character.add_state(:standing, state, move_vector)
   end
   
   def test_state_was_added
-    assert_includes @character.states, "stand"
+    assert_includes @character.states, :standing
   end
   
 end

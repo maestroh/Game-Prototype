@@ -11,19 +11,22 @@ class WhenChangingCharacterState < MiniTest::Unit::TestCase
     stand_move_vector = Vector2d.new(0,0)
     run_sprite_sheet = MiniTest::Mock::new
     run_move_vector = Vector2d.new(0,0)
+    statemachine = MiniTest::Mock::new
+    statemachine.expect :output_state, :running, [:standing, :run]
     
     ground = Ground.new(1,1)
     
-    @character = Character.new("character", ground)
-    @character.add_state("stand", stand_sprite_sheet, stand_move_vector)
-    @character.add_state("run", run_sprite_sheet, run_move_vector)
+    @character = Character.new(ground, stand_move_vector)
+    @character.add_state(:standing, stand_sprite_sheet, stand_move_vector)
+    @character.add_state(:running, run_sprite_sheet, run_move_vector)
     
-    @character.change_state("stand")
-    @character.change_state("run")
+    @character.add_statemachine(statemachine, :standing, :stand)
   end
   
   def test_state_was_changed
-    assert_equal @character.in_state, "run"
+    assert_equal :standing, @character.in_state
+    @character.change_state(:run)
+    assert_equal :running, @character.in_state
   end
   
 end
