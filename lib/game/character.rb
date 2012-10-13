@@ -23,7 +23,6 @@ class Character
     @statemachine = statemachine
     
     @current_state_id = initial_state
-    @default_event = default_event 
   end
   
   def states
@@ -50,17 +49,7 @@ class Character
     if @ground.on_ground?(@y) then
       @vy = move_vector.y
     end
-    
-    if done then
-      change_state(@default_event)
-    end
-  end
-  
-  def done
-    @states[@current_state_id][:sprite_sheet].done && @ground.on_ground(@y)
-  end
-  
-  def draw
+
     @x += @vx * @direction
     @vx = 0
     
@@ -73,10 +62,20 @@ class Character
       @y = @ground.get_height
       @vy = 0
     end 
-    
+
+    if @ground.on_ground?(@y) then
+      change_state("sim_#{@current_state_id}_stop".to_sym)
+    end
+  end
+  
+  def draw
     img = @states[@current_state_id][:sprite_sheet].image
     x_upperleft = @x - img.width / 2.0 * @direction
     y_upperleft = @y - img.height / 2.0
     img.draw(x_upperleft, y_upperleft , ZOrder::Character, @direction, 1, Gosu::Color.new(0xffffffff), :default)
+    
+     if @states[@current_state_id][:sprite_sheet].done then
+       change_state("render_#{@current_state_id}_stop".to_sym)
+     end
   end
 end
